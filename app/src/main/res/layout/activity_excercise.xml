@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/get_ready_for"
-        android:textSize="@dimen/default_button_text_size"
+        android:textSize="22sp"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
-        android:text="UPCOMING EXERCISE:"/>
+        android:text="@string/upcoming_exercise"/>
 
     <TextView
         android:id="@+id/tvUpcomingExerciseName"
@@ -94,7 +94,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
-        android:text="UPCOMING EXERCISE:"/>
+        android:text="@string/upcoming_exercise"/>
 
     <ImageView
         android:id="@+id/ivImage"
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="22sp"
-        android:text="ExerciseName"
+        android:text="@string/exercise_name"
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +127,6 @@
         tools:visibility="visible"
         android:visibility="gone"
         android:background="@drawable/item_circular_color_accent_border"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvExerciseName">
@@ -164,5 +163,15 @@
 
     </FrameLayout>
     
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExerciseStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="@id/flExerciseProgressBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
