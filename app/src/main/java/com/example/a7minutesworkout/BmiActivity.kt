@@ -10,6 +10,12 @@ import java.math.RoundingMode
 
 class BmiActivity : AppCompatActivity() {
 
+    companion object{
+        private const val METRIC_UNITS_VIEW = "METRIC_UNIT_VIEW"
+        private const val US_UNITS_VIEW = "US_UNIT_VIEW"
+    }
+    private var currentVisibleView : String = METRIC_UNITS_VIEW
+
     private var binding : ActivityBmiBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +32,30 @@ class BmiActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        makeVisibleMetricUnitsView() //setting the metric view as the default
+        binding?.rgUnits?.setOnCheckedChangeListener{_, checkedId : Int ->
+            if(checkedId == R.id.rbMetricUnits){
+                makeVisibleMetricUnitsView()
+            }else{
+                makeVisibleUsUnitsView()
+            }
+        }
         binding?.btnCalculateUnits?.setOnClickListener{
-            if(validateMetricUnits()){
+            if(currentVisibleView == METRIC_UNITS_VIEW && validateMetricUnits()){
                 val weightValue : Float = binding?.etMetricUnitWeight?.text.toString().toFloat()
                 val heightValue : Float = binding?.etMetricUnitHeight?.text.toString().toFloat() / 100
 
                 val bmi = weightValue / (heightValue*heightValue)
+
+                displayBmiResult(bmi)
+
+            }else if(currentVisibleView == US_UNITS_VIEW && validateUsUnits()){
+                val weightValue : Float = binding?.etUsUnitWeight?.text.toString().toFloat()
+                val heightValueFeet : Float = binding?.etUsUnitFeet?.text.toString().toFloat() * 12 //converting to inces
+                val heightValueInches : Float = binding?.etUsUnitInches?.text.toString().toFloat()
+                val heightValue = heightValueFeet + heightValueInches
+
+                val bmi = weightValue / (heightValue*heightValue) * 703
 
                 displayBmiResult(bmi)
 
@@ -46,6 +70,49 @@ class BmiActivity : AppCompatActivity() {
 
     }
 
+    private fun makeVisibleMetricUnitsView(){
+        currentVisibleView = METRIC_UNITS_VIEW
+        binding?.llMetricUnits?.visibility = View.VISIBLE
+        binding?.llUsUnits?.visibility = View.INVISIBLE
+
+        binding?.etMetricUnitHeight?.text!!.clear()
+        binding?.etMetricUnitWeight?.text!!.clear()
+
+        binding?.llDisplayBmiResult?.visibility = View.INVISIBLE
+    }
+    private fun makeVisibleUsUnitsView(){
+        currentVisibleView = US_UNITS_VIEW
+        binding?.llMetricUnits?.visibility = View.INVISIBLE
+        binding?.llUsUnits?.visibility = View.VISIBLE
+
+        binding?.etUsUnitFeet?.text!!.clear()
+        binding?.etUsUnitInches?.text!!.clear()
+        binding?.etUsUnitWeight?.text!!.clear()
+
+        binding?.llDisplayBmiResult?.visibility = View.INVISIBLE
+    }
+    private fun validateMetricUnits() : Boolean{
+        var isValid = true
+
+        if(binding?.etMetricUnitWeight?.text.toString().isEmpty()){
+            isValid = false
+        }else if(binding?.etMetricUnitHeight?.text.toString().isEmpty()){
+            isValid = false
+        }
+        return isValid
+    }
+    private fun validateUsUnits() : Boolean{
+        var isValid = true
+
+        if(binding?.etUsUnitFeet?.text.toString().isEmpty()) {
+            isValid = false
+        }else if(binding?.etUsUnitInches?.text.toString().isEmpty()){
+                isValid = false
+        }else if(binding?.etUsUnitWeight?.text.toString().isEmpty()){
+            isValid = false
+        }
+        return isValid
+    }
     private fun displayBmiResult(bmi : Float){
 
         val bmiLabel : String
@@ -82,20 +149,6 @@ class BmiActivity : AppCompatActivity() {
         binding?.tvBmiValue?.text = bmiValue
         binding?.tvBmiType?.text = bmiLabel
         binding?.tvBmiDescription?.text = bmiDescription
-
-
-
-    }
-    private fun validateMetricUnits() : Boolean{
-        var isValid = true
-
-        if(binding?.etMetricUnitWeight?.text.toString().isEmpty()){
-            isValid = false
-        }else if(binding?.etMetricUnitHeight?.text.toString().isEmpty()){
-            isValid = false
-        }
-
-        return isValid
 
     }
 }
